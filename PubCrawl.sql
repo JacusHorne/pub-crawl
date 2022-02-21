@@ -29,7 +29,7 @@ VALUES	('Milk and Honey Bar', 'https://milkhoneybar.co.za/wp-content/uploads/201
 		('Texan Wing Bar', 'https://www.texanwingbar.com/wp-content/uploads/2020/08/TWB-logo-Black.png', '12:00:00', '23:00:00', 0, geography::Point(-26.024367686413317, 28.013853419003674, 4326), '0104439150'),
 		('Tiger''s Milk Cedar Square', 'https://tigersmilk.co.za/wp-content/uploads/2018/03/TM_logo.png', '11:00:00', '00:00:00', 0, geography::Point(-26.017105909898834, 28.000301413454874, 4326), '0102861030'),
 		('Jozi Gin Bar Cedar', 'https://static.wixstatic.com/media/d799fb_9902658eb42d4449b1649f3767664cbf~mv2.png/v1/fill/w_252,h_103,al_c,q_85,usm_0.66_1.00_0.01/Screenshot%202020-02-26%20at%2010_41_22.webp', '12:00:00', '22:00:00', 0, geography::Point(-26.01636588366614, 27.999369340440904, 4326), '0100252913'),
-		('Cubaña Fourways', 'https://www.cubana.co.za/wp-content/uploads/2020/12/Cubana-n-logo-455x1024.png', '12:00:00', '02:00:00', 0, geography::Point(-26.01614813326442, 27.99890172694808, 4326), '0114655790'),
+		('Cubaï¿½a Fourways', 'https://www.cubana.co.za/wp-content/uploads/2020/12/Cubana-n-logo-455x1024.png', '12:00:00', '02:00:00', 0, geography::Point(-26.01614813326442, 27.99890172694808, 4326), '0114655790'),
 		('Pedro Portia - Cigar & Champagne Lounge', 'http://pedroportia.co.za/wp-content/uploads/2021/08/pedro_portia-1024x657.png', '10:00:00', '22:00:00', 0, geography::Point(-26.017837786567195, 28.00096597667504, 4326), '0823900666'),
 		('LAPA Pub Fourways', '', '11:00:00', '00:00:00', 0, geography::Point(-26.00828210628116, 28.00311715338788, 4326), '0110804110'),
 		('Social On Main - Bryanston', 'http://socialonmain.co.za/wp-content/uploads/2014/07/som-logo.png', '12:00:00', '23:00:00', 0, geography::Point(-26.05249783228487, 28.02301418277045, 4326), '0766095585'),
@@ -56,3 +56,17 @@ GO
 /* SELECT [name], geography::Point(-26.130461538032268, 28.04962319811458, 4326) AS [Texan], [location].STDistance(geography::Point(-26.130461538032268, 28.04962319811458, 4326)) AS [Meters]
 FROM [dbo].[Venue];
 */
+
+CREATE TABLE [dbo].[Venue_Drink](
+	[drink_id] int NOT NULL,
+	[venue_id] int NOT NULL,
+	[price] money,
+	[description] varchar(500),
+	CONSTRAINT [pk_venue_drink] PRIMARY KEY CLUSTERED 
+	(
+		[drink_id], [venue_id] ASC
+	),
+	CONSTRAINT [fk_venue_drink_drink] FOREIGN KEY (drink_id) REFERENCES [dbo].[Drink] ([drink_id]),
+	CONSTRAINT [fk_venue_drink_venue] FOREIGN KEY (drink_id) REFERENCES [dbo].[Venue] ([venue_id])
+)
+GO
