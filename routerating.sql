@@ -5,7 +5,8 @@ CREATE TABLE Route_Rating (
 	user_id int NOT NULL FOREIGN KEY REFERENCES Users(user_id),
 	route_id int NOT NULL FOREIGN KEY REFERENCES Route(route_id),
 	rating int NOT NULL,
-	comment varchar(255)
+	comment varchar(255),
+	CONSTRAINT route_tating_pk PRIMARY KEY (user_id, route_id)
 );
 
 INSERT INTO Route_Rating
