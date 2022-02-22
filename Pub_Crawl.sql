@@ -1,5 +1,0 @@
-USE master;
-GO
-
-CREATE DATABASE Pub_Crawl;
-GO
