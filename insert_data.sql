@@ -27,7 +27,9 @@ VALUES
 	(1, 1, 1, 'Too little time to have drinks at all the bars.'),
     (2, 2, 1, 'Horrible suggestion, poor service at X and O Bar.'),
     (3, 2, 5, 'I had so much fun on this route, I might do it again next week..'),
-    (4, 2, 3, 'It was great.. I got home tipsy, sure wish I passed out.')
+    (4, 2, 3, 'It was great.. I got home tipsy, sure wish I passed out.'),
+    (4, 3, 2, 'Mehhh..'),
+    (6, 3, 1, 'Boring')
 GO
 
 INSERT INTO [dbo].[Venue] 

@@ -30,7 +30,7 @@ CREATE TABLE [dbo].[User] (
 );
 GO
 
---Person table
+--Route table
 CREATE TABLE [dbo].[Route] (
 	[route_id] int IDENTITY(1,1) NOT NULL,
 	[name] varchar(50) NOT NULL,
