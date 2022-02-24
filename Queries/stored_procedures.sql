@@ -46,7 +46,7 @@ CREATE PROCEDURE [dbo].[Insert_Stop]
 	@RouteID int,
 	@VenueID int,
 	@Duration int,
-	@StopNumber int
+	@StopNumber int = -1
 )
 AS
 BEGIN
@@ -54,22 +54,27 @@ BEGIN
 BEGIN TRANSACTION [Tran1]
 
 BEGIN TRY
-	IF @StopNumber <= (SELECT MAX([stop_number]) FROM [dbo].[Route_Stop] WHERE [dbo].[Route_Stop].[route_ID] = @RouteID) + 1
+	DECLARE @Max int
+	SELECT @Max = MAX([stop_number]) FROM [dbo].[Route_Stop] WHERE [dbo].[Route_Stop].[route_ID] = @RouteID
+	SET @Max = @Max + 1
+	IF @StopNumber > @Max OR @StopNumber < 1
 	BEGIN
-		UPDATE [dbo].[Route_Stop]
-		SET
-			[dbo].[Route_Stop].[stop_number] = [dbo].[Route_Stop].[stop_number] + 1
-		WHERE
-			[dbo].[Route_Stop].[stop_number] >= @StopNumber AND [dbo].[Route_Stop].[route_ID] = @RouteID
-	
-		INSERT INTO [dbo].[Route_Stop]
-			([venue_id], [route_id], [duration], [stop_number])
-		VALUES  
-			(@VenueID,
-			 @RouteID,
-			 @Duration,
-			 @StopNumber)
+		SET @StopNumber = @Max 
 	END
+
+	UPDATE [dbo].[Route_Stop]
+	SET
+		[dbo].[Route_Stop].[stop_number] = [dbo].[Route_Stop].[stop_number] + 1
+	WHERE
+		[dbo].[Route_Stop].[stop_number] >= @StopNumber AND [dbo].[Route_Stop].[route_ID] = @RouteID
+	
+	INSERT INTO [dbo].[Route_Stop]
+		([venue_id], [route_id], [duration], [stop_number])
+	VALUES  
+		(@VenueID,
+			@RouteID,
+			@Duration,
+			@StopNumber)
 
 	COMMIT TRANSACTION [Tran1]
 
