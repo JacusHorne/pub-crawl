@@ -8,10 +8,10 @@ in descending order.
 */
 
 
-DROP PROCEDURE IF EXISTS dbo.Ratings
+DROP PROCEDURE IF EXISTS [dbo].[usp_Ratings_By_Route]
 GO
 
-CREATE PROCEDURE dbo.Ratings
+CREATE PROCEDURE [dbo].[usp_Ratings_By_Route]
 (
 	@RouteID	int
 )
@@ -20,11 +20,12 @@ BEGIN;
 
 BEGIN TRY
 
-SELECT dbo.[User].[name],dbo.Route_Rating.rating, dbo.Route_Rating.comment FROM dbo.Route_Rating
-INNER JOIN [dbo].[User]
-ON dbo.Route_Rating.user_id = dbo.[User].user_id
-WHERE route_id = @RouteID
-ORDER BY dbo.Route_Rating.rating DESC;
+SELECT u.[name], rr.[rating], rr.[comment] 
+FROM [dbo].[Route_Rating] rr
+INNER JOIN [dbo].[User] u
+ON rr.[user_id] = u.[user_id]
+WHERE [route_id] = @RouteID
+ORDER BY rr.[rating] DESC;
 
 END TRY
 BEGIN CATCH
@@ -33,4 +34,8 @@ BEGIN CATCH
 END CATCH
 
 END;
+GO
+
+
+EXEC [dbo].[usp_Ratings_By_Route] 2 
 GO

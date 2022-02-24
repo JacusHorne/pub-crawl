@@ -2,33 +2,42 @@
 USE PubCrawl
 GO
 
-CREATE VIEW [top_routes]
+DROP VIEW IF EXISTS [dbo].[v_Top_Routes] 
+DROP VIEW IF EXISTS [dbo].[v_Drink_Price]
+DROP VIEW IF EXISTS [dbo].[v_Venue_Rating]
+GO
+
+CREATE VIEW [v_Top_Routes]
 AS
-SELECT
-	[route].[name],
-	AVG([route_rating].[rating]) AS [rating]
-FROM [dbo].[Route] AS [route], [dbo].[Route_Rating] AS [route_rating]
-WHERE [route].[route_id] = [route_rating].[route_id]
-GROUP BY [route].[name]
-ORDER BY [rating] DESC OFFSET 0 ROWS;
+	SELECT r.[name], AVG(rr.[rating]) AS [average_rating]
+	FROM [dbo].[Route] r, [dbo].[Route_Rating] rr
+	WHERE r.[route_id] = rr.[route_id]
+	GROUP BY r.[name]
+	ORDER BY [average_rating] 
+	DESC OFFSET 0 ROWS;
 GO
 
 -- Average drink price
-CREATE VIEW vDrinkPrice
+CREATE VIEW [v_Drink_Price]
 AS
-	SELECT d.[name], AVG(vd.[price]) AS average_price
+	SELECT d.[name], AVG(vd.[price]) AS [average_price]
 	FROM [dbo].[Drink] d
 		JOIN [dbo].[Venue_Drink] vd ON d.[drink_id] = vd.[drink_id]
-	GROUP BY d.[name]
+	GROUP BY d.[name];
 GO
 
--- Average venue rating (keep rounding?)
-CREATE VIEW vVenueRating
+-- Average venue rating
+CREATE VIEW [v_Venue_Rating]
 AS
-	SELECT v.[name], AVG(rr.[rating]) AS average_rating
+	SELECT v.[name], AVG(rr.[rating]) AS [average_rating]
 	FROM [dbo].[Venue] v
 		JOIN [dbo].[Route_Stop] rs ON v.[venue_id] = rs.[venue_id]
 		JOIN [dbo].[Route] r ON rs.[route_id] = r.[route_id]
 		JOIN [dbo].[Route_Rating] rr ON r.[route_id] = rr.[route_id]
-	GROUP BY v.[name]
+	GROUP BY v.[name];
 GO
+
+
+SELECT * FROM [v_Top_Routes]
+SELECT * FROM [v_Drink_Price]
+SELECT * FROM [v_Venue_Rating]

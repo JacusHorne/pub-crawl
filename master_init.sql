@@ -14,10 +14,6 @@ GO
 USE PubCrawl;
 GO
 
--- For testing purposes
-ALTER AUTHORIZATION ON DATABASE::[Pubcrawl] TO [sa]
-GO
-
 --User table
 CREATE TABLE [dbo].[User] (
 	[user_id] int IDENTITY(1,1) NOT NULL,
