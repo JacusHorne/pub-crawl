@@ -7,7 +7,6 @@ route along with the comments and the name of the user who left the review
 in descending order.
 */
 
-
 DROP PROCEDURE IF EXISTS dbo.Ratings
 GO
 
@@ -33,4 +32,42 @@ BEGIN CATCH
 END CATCH
 
 END;
+GO
+
+/*
+Proc that inserts a route stop into  a route given a route ID, a venue ID and stop number.
+*/
+
+DROP PROCEDURE IF EXISTS [dbo].[Insert_Stop]
+GO
+
+CREATE PROCEDURE [dbo].[Insert_Stop]
+(
+	@RouteID int,
+	@VenueID int,
+	@Duration int,
+	@StopNumber int
+)
+AS
+BEGIN
+
+BEGIN TRANSACTION
+
+INSERT INTO [dbo].[Route_Stop]
+	([venue_id], [route_id], [duration], [stop_number])
+VALUES  
+	(@VenueID,
+	 @RouteID,
+	 @Duration,
+	 @StopNumber)
+
+UPDATE [dbo].[Route_Stop]
+SET
+    [dbo].[Route_Stop].[stop_number] = [dbo].[Route_Stop].[stop_number] + 1
+WHERE
+    [dbo].[Route_Stop].[stop_number] >= @StopNumber AND [dbo].[Route_Stop].[route_ID] = @RouteID
+
+COMMIT TRANSACTION
+
+END
 GO
