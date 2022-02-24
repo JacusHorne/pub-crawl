@@ -42,8 +42,3 @@ AS
 		JOIN [dbo].[Route_Rating] rr ON r.[route_id] = rr.[route_id]
 	GROUP BY v.[name];
 GO
-
-
-SELECT * FROM [v_Top_Routes]
-SELECT * FROM [v_Drink_Price]
-SELECT * FROM [v_Venue_Rating]
