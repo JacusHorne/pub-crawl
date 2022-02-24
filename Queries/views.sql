@@ -40,5 +40,6 @@ AS
 		JOIN [dbo].[Route_Stop] rs ON v.[venue_id] = rs.[venue_id]
 		JOIN [dbo].[Route] r ON rs.[route_id] = r.[route_id]
 		JOIN [dbo].[Route_Rating] rr ON r.[route_id] = rr.[route_id]
-	GROUP BY v.[name];
+	GROUP BY v.[name]
+	ORDER BY [average_rating] DESC OFFSET 0 ROWS;
 GO
