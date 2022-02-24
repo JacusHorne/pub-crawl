@@ -3,16 +3,16 @@ GO
 
 -- User defined functions
 
-SELECT * FROM udf_Nearby_Venues(2, 5);
+SELECT * FROM [dbo].[udf_Nearby_Venues](2, 5);
 GO
 
-SELECT * FROM udf_Nearby_Venues(18, 3);
+SELECT * FROM [dbo].[udf_Nearby_Venues](18, 3);
 GO
 
-SELECT * FROM udf_Nearby_Venues(25, 2);
+SELECT * FROM [dbo].[udf_Nearby_Venues](25, 2);
 GO
 
-SELECT * FROM udf_Find_Comment_Substring('little')
+SELECT * FROM [dbo].[udf_Find_Comment_Substring]('little')
 GO
 
 
@@ -21,20 +21,20 @@ GO
 EXEC [dbo].[usp_Ratings_By_Route] 2
 GO
 
-EXEC [dbo].[usp_Insert_Stop] @RouteID = 1, @VenueID = 2, @Duration = 1, @StopNumber = 3
+EXEC [dbo].[usp_Insert_Stop] @route_id = 1, @venue_id = 2, @duration = 1, @stop_number = 3
 GO
 
-EXEC [dbo].[usp_Delete_Stop] @RouteID = 1, @StopNumber = 3
+EXEC [dbo].[usp_Delete_Stop] @route_id = 1, @stop_number = 3
 GO
 
 
 -- Views
 
-SELECT * FROM [v_Top_Routes]
+SELECT * FROM [dbo].[v_Top_Routes]
 GO
 
-SELECT * FROM [v_Drink_Price]
+SELECT * FROM [dbo].[v_Drink_Price]
 GO
 
-SELECT * FROM [v_Venue_Rating]
+SELECT * FROM [dbo].[v_Venue_Rating]
 GO

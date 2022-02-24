@@ -12,7 +12,7 @@ GO
 
 CREATE PROCEDURE [dbo].[usp_Ratings_By_Route]
 (
-	@RouteID	int
+	@route_id	int
 )
 AS
 BEGIN;
@@ -23,7 +23,7 @@ SELECT u.[name], rr.[rating], rr.[comment]
 FROM [dbo].[Route_Rating] rr
 INNER JOIN [dbo].[User] u
 ON rr.[user_id] = u.[user_id]
-WHERE [route_id] = @RouteID
+WHERE [route_id] = @route_id
 ORDER BY rr.[rating] DESC;
 
 END TRY
@@ -45,10 +45,10 @@ GO
 
 CREATE PROCEDURE [dbo].[usp_Insert_Stop]
 (
-	@RouteID int,
-	@VenueID int,
-	@Duration int,
-	@StopNumber int = -1
+	@route_id int,
+	@venue_id int,
+	@duration int,
+	@stop_number int = -1
 )
 AS
 BEGIN
@@ -57,23 +57,23 @@ BEGIN TRANSACTION [Tran1]
 
 BEGIN TRY
 	DECLARE @Max int
-	SELECT @Max = MAX([stop_number]) FROM [dbo].[Route_Stop] WHERE [route_ID] = @RouteID
+	SELECT @Max = MAX([stop_number]) FROM [dbo].[Route_Stop] WHERE [route_ID] = @route_id
 	SET @Max = @Max + 1
-	IF @StopNumber > @Max OR @StopNumber < 1
+	IF @stop_number > @Max OR @stop_number < 1
 	BEGIN
-		SET @StopNumber = @Max
+		SET @stop_number = @Max
 	END
 
 	UPDATE [dbo].[Route_Stop]
 		SET
 			[stop_number] = [stop_number] + 1
 		WHERE
-			[stop_number] >= @StopNumber AND [route_ID] = @RouteID
+			[stop_number] >= @stop_number AND [route_ID] = @route_id
 	
 	INSERT INTO [dbo].[Route_Stop]
 		([venue_id], [route_id], [duration], [stop_number])
 	VALUES  
-		(@VenueID, @RouteID, @Duration, @StopNumber)
+		(@venue_id, @route_id, @duration, @stop_number)
 
 	COMMIT TRANSACTION [Tran1]
 
@@ -98,8 +98,8 @@ GO
 
 CREATE PROCEDURE [dbo].[usp_Delete_Stop]
 (
-	@RouteID int,
-	@StopNumber int
+	@route_id int,
+	@stop_number int
 )
 AS
 BEGIN
@@ -109,13 +109,13 @@ BEGIN TRANSACTION [Tran1]
 BEGIN TRY
 
 	DELETE FROM [dbo].[Route_Stop] 
-	WHERE [stop_number] = @StopNumber AND [route_ID] = @RouteID
+	WHERE [stop_number] = @stop_number AND [route_ID] = @route_id
 
 	UPDATE [dbo].[Route_Stop]
 	SET
 		[stop_number] = [stop_number] - 1
 	WHERE
-		[stop_number] > @StopNumber AND [route_ID] = @RouteID
+		[stop_number] > @stop_number AND [route_ID] = @route_id
 
 	COMMIT TRANSACTION [Tran1]
 

@@ -18,8 +18,8 @@ CREATE FUNCTION [dbo].[udf_Nearby_Venues] (
 )
 RETURNS @Venues TABLE
 (
-	[Name] VARCHAR(200),
-	[Distance (km)] FLOAT
+	[name] VARCHAR(200),
+	[distance (km)] FLOAT
 )
 AS 
 	BEGIN
