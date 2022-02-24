@@ -35,7 +35,7 @@ END;
 GO
 
 /*
-Proc that inserts a route stop into  a route given a route ID, a venue ID and stop number.
+Proc that inserts a route stop into a route given a route ID, a venue ID, a duration and stop number.
 */
 
 DROP PROCEDURE IF EXISTS [dbo].[Insert_Stop]
@@ -51,23 +51,73 @@ CREATE PROCEDURE [dbo].[Insert_Stop]
 AS
 BEGIN
 
-BEGIN TRANSACTION
+BEGIN TRANSACTION [Tran1]
 
-INSERT INTO [dbo].[Route_Stop]
-	([venue_id], [route_id], [duration], [stop_number])
-VALUES  
-	(@VenueID,
-	 @RouteID,
-	 @Duration,
-	 @StopNumber)
+BEGIN TRY
+	IF @StopNumber <= (SELECT MAX([stop_number]) FROM [dbo].[Route_Stop] WHERE [dbo].[Route_Stop].[route_ID] = @RouteID) + 1
+	BEGIN
+		UPDATE [dbo].[Route_Stop]
+		SET
+			[dbo].[Route_Stop].[stop_number] = [dbo].[Route_Stop].[stop_number] + 1
+		WHERE
+			[dbo].[Route_Stop].[stop_number] >= @StopNumber AND [dbo].[Route_Stop].[route_ID] = @RouteID
+	
+		INSERT INTO [dbo].[Route_Stop]
+			([venue_id], [route_id], [duration], [stop_number])
+		VALUES  
+			(@VenueID,
+			 @RouteID,
+			 @Duration,
+			 @StopNumber)
+	END
 
-UPDATE [dbo].[Route_Stop]
-SET
-    [dbo].[Route_Stop].[stop_number] = [dbo].[Route_Stop].[stop_number] + 1
-WHERE
-    [dbo].[Route_Stop].[stop_number] >= @StopNumber AND [dbo].[Route_Stop].[route_ID] = @RouteID
+	COMMIT TRANSACTION [Tran1]
 
-COMMIT TRANSACTION
+END TRY
+
+BEGIN CATCH
+	ROLLBACK TRANSACTION [Tran1]
+END CATCH
+
+END
+GO
+
+/*
+Proc that removes a route stop from a route given a route ID and stop number.
+*/
+
+DROP PROCEDURE IF EXISTS [dbo].[Delete_Stop]
+GO
+
+CREATE PROCEDURE [dbo].[Delete_Stop]
+(
+	@RouteID int,
+	@StopNumber int
+)
+AS
+BEGIN
+
+BEGIN TRANSACTION [Tran1]
+
+BEGIN TRY
+
+	DELETE FROM [dbo].[Route_Stop] 
+	WHERE [dbo].[Route_Stop].[stop_number] = @StopNumber
+		AND [dbo].[Route_Stop].[route_ID] = @RouteID
+
+	UPDATE [dbo].[Route_Stop]
+	SET
+		[dbo].[Route_Stop].[stop_number] = [dbo].[Route_Stop].[stop_number] - 1
+	WHERE
+		[dbo].[Route_Stop].[stop_number] > @StopNumber AND [dbo].[Route_Stop].[route_ID] = @RouteID
+
+	COMMIT TRANSACTION [Tran1]
+
+END TRY
+
+BEGIN CATCH
+	ROLLBACK TRANSACTION [Tran1]
+END CATCH
 
 END
 GO

@@ -8,17 +8,60 @@ IF NOT EXISTS (
         FROM sys.databases
         WHERE name = N'Pubcrawl'
 )
+
 CREATE DATABASE Pubcrawl
 GO
 
 USE PubCrawl;
 GO
 
--- For testing purposes
-ALTER AUTHORIZATION ON DATABASE::[Pubcrawl] TO [sa]
+--DROP FOREIGN KEYS
+
+IF OBJECT_ID('fk_route_user', 'F') IS NOT NULL
+ALTER TABLE [Route] DROP CONSTRAINT [fk_route_user]
+GO
+
+IF OBJECT_ID('fk_route_rating_user', 'F') IS NOT NULL
+ALTER TABLE [Route_Rating] DROP CONSTRAINT [fk_route_rating_user]
+GO
+
+IF OBJECT_ID('fk_route_rating_route', 'F') IS NOT NULL
+ALTER TABLE [Route_Rating] DROP CONSTRAINT [fk_route_rating_route]
+GO
+
+IF OBJECT_ID('fk_route_stop_venue', 'F') IS NOT NULL
+ALTER TABLE [Route_Stop] DROP CONSTRAINT [fk_route_stop_venue]
+GO
+
+IF OBJECT_ID('fk_route_stop_route', 'F') IS NOT NULL
+ALTER TABLE [Route_Stop] DROP CONSTRAINT [fk_route_stop_route]
+GO
+
+IF OBJECT_ID('fk_drink_type', 'F') IS NOT NULL
+ALTER TABLE [Drink] DROP CONSTRAINT [fk_drink_type]
+GO
+
+IF OBJECT_ID('fk_venue_drink_drink', 'F') IS NOT NULL
+ALTER TABLE [Venue_Drink] DROP CONSTRAINT [fk_venue_drink_drink]
+GO
+
+IF OBJECT_ID('fk_venue_drink_venue', 'F') IS NOT NULL
+ALTER TABLE [Venue_Drink] DROP CONSTRAINT [fk_venue_drink_venue]
+GO
+
+IF OBJECT_ID('fk_venue_tag_tag', 'F') IS NOT NULL
+ALTER TABLE [Venue_Tag] DROP CONSTRAINT [fk_venue_tag_tag]
+GO
+
+IF OBJECT_ID('fk_venue_tag_venue', 'F') IS NOT NULL
+ALTER TABLE [Venue_Tag] DROP CONSTRAINT [fk_venue_tag_venue]
 GO
 
 --User table
+IF OBJECT_ID('User', 'U') IS NOT NULL
+DROP TABLE [dbo].[User]
+GO
+
 CREATE TABLE [dbo].[User] (
 	[user_id] int IDENTITY(1,1) NOT NULL,
 	[name] varchar(50) NOT NULL,
@@ -30,7 +73,11 @@ CREATE TABLE [dbo].[User] (
 );
 GO
 
---Person table
+--Route table
+IF OBJECT_ID('Route', 'U') IS NOT NULL
+DROP TABLE [dbo].[Route]
+GO
+
 CREATE TABLE [dbo].[Route] (
 	[route_id] int IDENTITY(1,1) NOT NULL,
 	[name] varchar(50) NOT NULL,
@@ -44,6 +91,9 @@ CREATE TABLE [dbo].[Route] (
 GO
 
 --Route_Rating table
+IF OBJECT_ID('Route_Rating', 'U') IS NOT NULL
+DROP TABLE [dbo].[Route_Rating]
+GO
 
 CREATE TABLE [dbo].[Route_Rating] (
 	[user_id] int NOT NULL,
@@ -60,6 +110,9 @@ CREATE TABLE [dbo].[Route_Rating] (
 GO
 
 --Venue table
+IF OBJECT_ID('Venue', 'U') IS NOT NULL
+DROP TABLE [dbo].[Venue]
+GO
 
 CREATE TABLE [dbo].[Venue](
 	[venue_id] int IDENTITY(1,1) NOT NULL,
@@ -76,6 +129,9 @@ CREATE TABLE [dbo].[Venue](
 GO
 
 --Route_Stop
+IF OBJECT_ID('Route_Stop', 'U') IS NOT NULL
+DROP TABLE [dbo].[Route_Stop]
+GO
 
 CREATE TABLE [dbo].[Route_Stop] (
 	[venue_id] int NOT NULL,
@@ -92,6 +148,9 @@ CREATE TABLE [dbo].[Route_Stop] (
 GO
 
 --Type table
+IF OBJECT_ID('Type', 'U') IS NOT NULL
+DROP TABLE [dbo].[Type]
+GO
 
 CREATE TABLE [dbo].[Type](
 	[type_id] int IDENTITY(1,1) NOT NULL,
@@ -104,6 +163,9 @@ CREATE TABLE [dbo].[Type](
 GO
 
 -- Drink table
+IF OBJECT_ID('Drink', 'U') IS NOT NULL
+DROP TABLE [dbo].[Drink]
+GO
 
 CREATE TABLE [dbo].[Drink](
 	[drink_id] int IDENTITY(1,1) NOT NULL,
@@ -119,6 +181,9 @@ GO
 
 
 --Venue_Drink table
+IF OBJECT_ID('Venue_Drink', 'U') IS NOT NULL
+DROP TABLE [dbo].[Venue_Drink]
+GO
 
 CREATE TABLE [dbo].[Venue_Drink](
 	[drink_id] int NOT NULL,
@@ -135,6 +200,9 @@ CREATE TABLE [dbo].[Venue_Drink](
 GO
 
 --Tag table
+IF OBJECT_ID('Tag', 'U') IS NOT NULL
+DROP TABLE [dbo].[Tag]
+GO
 
 CREATE TABLE [dbo].[Tag] (
 	[tag_id] int IDENTITY(1,1) NOT NULL,
@@ -147,6 +215,9 @@ CREATE TABLE [dbo].[Tag] (
 GO
 
 --Venue_Tag table
+IF OBJECT_ID('Venue_Tag', 'U') IS NOT NULL
+DROP TABLE [dbo].[Venue_Tag]
+GO
 
 CREATE TABLE [dbo].[Venue_Tag] (
 	[tag_id] int NOT NULL,
