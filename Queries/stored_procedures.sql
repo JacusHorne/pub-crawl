@@ -36,9 +36,6 @@ END;
 GO
 
 
-EXEC [dbo].[usp_Ratings_By_Route] 2 
-
-
 /*
 Proc that inserts a route stop into a route given a route ID, a venue ID, a duration and stop number.
 */
@@ -91,8 +88,6 @@ END CATCH
 END
 GO
 
-EXEC [dbo].[usp_Insert_Stop] @RouteID = 1, @VenueID = 2, @Duration = 1, @StopNumber = 3
-GO
 
 /*
 Proc that removes a route stop from a route given a route ID and stop number.
@@ -133,7 +128,4 @@ BEGIN CATCH
 END CATCH
 
 END
-GO
-
-EXEC [dbo].[usp_Delete_Stop] @RouteID = 1, @StopNumber = 3
 GO

@@ -5,7 +5,6 @@ DROP FUNCTION IF EXISTS [dbo].[udf_Nearby_Venues]
 DROP FUNCTION IF EXISTS [dbo].[udf_Find_Comment_Substring]
 GO
 
-
 /* 
     Function: udfNearbyVenues
     Description: Returns a list of venues and their distances from a given venue. The list is limited to venues in a close proximity to the given venue.
@@ -34,12 +33,6 @@ AS
 		WHERE (@venue_from.STDistance([location]) / 1000) <= @distance AND [venue_id] != @venue_id;
 		RETURN;
 	END
-GO
-
--- Examples
-SELECT * FROM udf_Nearby_Venues(2, 5);
-SELECT * FROM udf_Nearby_Venues(18, 3);
-SELECT * FROM udf_Nearby_Venues(25, 2);
 GO
 
 /*
@@ -71,5 +64,3 @@ AS
         RETURN;
     END
 GO
-
-SELECT * FROM [dbo].[udf_Find_Comment_Substring]('little')
