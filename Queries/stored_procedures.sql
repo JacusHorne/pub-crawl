@@ -37,6 +37,8 @@ GO
 
 
 EXEC [dbo].[usp_Ratings_By_Route] 2 
+
+
 /*
 Proc that inserts a route stop into a route given a route ID, a venue ID, a duration and stop number.
 */
@@ -82,6 +84,8 @@ END TRY
 
 BEGIN CATCH
 	ROLLBACK TRANSACTION [Tran1]
+	PRINT 'Error occurred in ' + ERROR_PROCEDURE() + ' ' + ERROR_MESSAGE();
+	RETURN -1;
 END CATCH
 
 END
@@ -124,6 +128,8 @@ END TRY
 
 BEGIN CATCH
 	ROLLBACK TRANSACTION [Tran1]
+	PRINT 'Error occurred in ' + ERROR_PROCEDURE() + ' ' + ERROR_MESSAGE();
+	RETURN -1;
 END CATCH
 
 END
